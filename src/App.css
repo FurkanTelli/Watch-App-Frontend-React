@@ -1,0 +1,8 @@
+.App {
+  text-align: center;
+  height: 100vh;
+}
+
+.dark-theme {
+  background-color: rgb(25, 25, 25);
+}
