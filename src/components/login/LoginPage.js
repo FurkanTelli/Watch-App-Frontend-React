@@ -30,14 +30,11 @@ const LoginPage = () => {
         setLoading(false);
         dispatch(setIsLogin(true))
         dispatch(setUser(login.userName))
-        console.log(login)
-        console.log(store)
         navigate("/Home")
 
       } else {
         setLoading(false);
         dispatch(setIsLogin(false))
-        console.log(store)
       }
     }, 2000);
   }
@@ -58,8 +55,8 @@ const LoginPage = () => {
         </div>
 
         <div className="card flex justify-content-center">
-          <span className="p-inputgroup-addon">$</span>
-          <Password value={login.password} onChange={(e) => handleUserInput(e.target.value, "password")} toggleMask />
+          <span className="p-inputgroup-addon"><i className="pi pi-key"></i></span>
+          <Password value={login.password} placeholder='Password' onChange={(e) => handleUserInput(e.target.value, "password")} toggleMask />
         </div>
         <div className="card flex flex-wrap justify-content-center gap-3 mt-3">
           <Button label="Submit" severity='secondary' icon="pi pi-check" className='w-full' loading={loading} onClick={submit} />

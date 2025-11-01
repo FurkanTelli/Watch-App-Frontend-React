@@ -11,9 +11,17 @@ const productService = {
         const response = await axios.get(`${API_URL}/${id}`);
         return response.data;
     }, 
+    updateWatchById: async (id, data) => {
+        const response = await axios.put(`${API_URL}/${id}`,data);
+        return response;
+    },
     deleteWatch:async (id) => {
         const response = await axios.delete(`${API_URL}/${id}`);
         return response.data;
+    },
+    addNewWatch: async (body) => {
+        const response = axios.post(API_URL,body);
+        return response;
     }
 }
 
