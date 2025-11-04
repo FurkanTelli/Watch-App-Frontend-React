@@ -6,6 +6,7 @@ import "./LoginPage.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsLogin, setUser } from '../../store/userSlice';
 import { useNavigate } from 'react-router-dom';
+import userService from '../../api/User';
 
 
 const LoginPage = () => {
@@ -23,20 +24,32 @@ const LoginPage = () => {
     }))
   }
 
-  const submit = () => {
+  const submit = async () => {
     setLoading(true);
-    setTimeout(() => {
-      if (login.userName === "admin" && login.email === "admin@gmail.com" && login.password === "admin2627") {
-        setLoading(false);
+    try {
+      const response = await userService.loginById(login);
+      if (response.status === 200 || response.status === 201) {
         dispatch(setIsLogin(true))
         dispatch(setUser(login.userName))
         navigate("/Home")
-
-      } else {
-        setLoading(false);
-        dispatch(setIsLogin(false))
       }
-    }, 2000);
+    } catch (error) {
+      setLoading(false);
+      dispatch(setIsLogin(false))
+      console.log(error.message);
+    }
+    // setTimeout(() => {
+    //   if (login.userName === "admin" && login.email === "admin@gmail.com" && login.password === "admin2627") {
+    //     setLoading(false);
+    //     dispatch(setIsLogin(true))
+    //     dispatch(setUser(login.userName))
+    //     navigate("/Home")
+
+    //   } else {
+    //     setLoading(false);
+    //     dispatch(setIsLogin(false))
+    //   }
+    // }, 2000);
   }
 
   return (
