@@ -5,7 +5,8 @@ const initialState = {
     user: "",
     id:"",
     isLogin: false,
-    myBaskets:[]
+    myBaskets:[],
+    userToken:""
 }
 
 
@@ -27,10 +28,13 @@ export const userSlice = createSlice({
         },
         setMyBaskets:(state,action) => {
             state.myBaskets = action.payload;
+        },
+        setUserToken:(state, action) => {
+            state.userToken = action.payload;
         }
     }
 })
 
 
-export const {setId, setIsLogin, setTheme, setUser, setMyBaskets} = userSlice.actions;
+export const {setId, setIsLogin, setTheme, setUser, setMyBaskets, setUserToken} = userSlice.actions;
 export default userSlice.reducer;

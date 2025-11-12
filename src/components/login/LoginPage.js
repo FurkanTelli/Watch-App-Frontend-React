@@ -1,21 +1,26 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import "./LoginPage.css"
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsLogin, setUser } from '../../store/userSlice';
+import { setIsLogin, setUser, setUserToken } from '../../store/userSlice';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../api/User';
+import { Toast } from 'primereact/toast';
 
 
 const LoginPage = () => {
   const [login, setLogin] = useState({ id: "", userName: "", password: "", email: "" })
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
   const store = useSelector(state => state.userStatus.isLogin)
+  const tokenInStore = useSelector(state => state.userStatus.userToken)
+
+  const toast = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
 
   const handleUserInput = (val, type) => {
     setLogin((prev) => ({
@@ -31,26 +36,23 @@ const LoginPage = () => {
       if (response.status === 200 || response.status === 201) {
         dispatch(setIsLogin(true))
         dispatch(setUser(login.userName))
-        navigate("/Home")
+        await localStorage.setItem("myToken", response?.data?.generateToken);
+        dispatch(setUserToken(localStorage.getItem("myToken")))
+        await navigate("/Home")
       }
     } catch (error) {
       setLoading(false);
       dispatch(setIsLogin(false))
-      console.log(error.message);
+      console.log(error);
+      if(error?.response?.status === 401) {
+        toast.current.show({ severity: 'error', summary: 'Error', detail: error?.response?.data, life: 3000 });
+      } else {
+        toast.current.show({ severity: 'error', summary: 'Error', detail: "Backend Connection Error", life: 3000 });
+      }
     }
-    // setTimeout(() => {
-    //   if (login.userName === "admin" && login.email === "admin@gmail.com" && login.password === "admin2627") {
-    //     setLoading(false);
-    //     dispatch(setIsLogin(true))
-    //     dispatch(setUser(login.userName))
-    //     navigate("/Home")
 
-    //   } else {
-    //     setLoading(false);
-    //     dispatch(setIsLogin(false))
-    //   }
-    // }, 2000);
   }
+
 
   return (
     <div className='flex h-full justify-content-center align-items-center '>
@@ -75,7 +77,7 @@ const LoginPage = () => {
           <Button label="Submit" severity='secondary' icon="pi pi-check" className='w-full' loading={loading} onClick={submit} />
         </div>
       </div>
-
+      <Toast ref={toast} />
 
     </div>
   )
