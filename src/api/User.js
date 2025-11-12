@@ -12,6 +12,10 @@ const userService = {
     logout: async () => {
         const response = await axios.post(`${API_URL}/logout`)
         return response;
+    },
+    registerUser: async (userBody) => {
+        const response = await axios.post(`${API_URL}/createUser`,userBody)
+        return response;
     }
 }
 
