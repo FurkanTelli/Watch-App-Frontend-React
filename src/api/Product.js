@@ -17,7 +17,7 @@ const productService = {
     },
     deleteWatch:async (id) => {
         const response = await axios.delete(`${API_URL}/${id}`);
-        return response.data;
+        return response;
     },
     addNewWatch: async (body) => {
         const response = axios.post(API_URL,body);

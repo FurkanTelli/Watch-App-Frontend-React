@@ -1,16 +1,19 @@
 import { Button } from 'primereact/button';
 import ToolbarComponent from '../toolbar/ToolbarComponent';
 import { Dialog } from 'primereact/dialog';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import productService from '../../api/Product';
 import WatchProductList from '../watchesList/WatchProductList';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDidNewWatchAdd } from '../../store/userSlice';
 
 const HomePage = () => {
 
     const [visible, setVisible] = useState(false);
-    const [newWatch, setNewWatch] = useState({watchId: "", watchname: "", watchbrand: "", price: 0, imgAdress: "" });
+    const [newWatch, setNewWatch] = useState({ watchId: "", watchname: "", watchbrand: "", price: 0, imgAdress: "" });
+    const dispatch = useDispatch();
 
     const handleInputsToAddNewWatch = (val, type) => {
         setNewWatch((prev) => ({
@@ -19,22 +22,15 @@ const HomePage = () => {
         }))
     }
 
-     const loadProducts = async () => {
-        try {
-            const data = await productService.getAllWatches();
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     const createNewWatch = async () => {
         try {
             const response = await productService.addNewWatch(newWatch);
-            if(response.status === 200 || response.status === 201) {
-                await loadProducts();
+            if (response.status === 200 || response.status === 201) {
                 await setVisible(false);
+                dispatch(setDidNewWatchAdd(true));
             }
-            
+
         } catch (error) {
             console.log(error)
         }

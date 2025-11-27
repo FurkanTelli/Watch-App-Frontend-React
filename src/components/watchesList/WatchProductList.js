@@ -6,12 +6,16 @@ import { Dialog } from 'primereact/dialog';
 import productService from '../../api/Product';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDidNewWatchAdd } from '../../store/userSlice';
 
 
 const WatchProductList = () => {
     const [products, setProducts] = useState([]);
     const [editWatch, setEditWatch] = useState({ wathcId: "", watchname: "", watchbrand: "", price: 0, imgAdress: "" })
     const [visible, setVisible] = useState(false);
+    const store = useSelector(state => state);
+    const dispatch = useDispatch();
 
 
     const loadProducts = async () => {
@@ -43,9 +47,25 @@ const WatchProductList = () => {
         }
     }
 
+    const deleteWatch = async () => {
+        try {
+            const response = await productService.deleteWatch(editWatch.wathcId);
+            console.log(response)
+            if (response?.status === 204) {
+                setVisible(false);
+                await loadProducts();
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+
     useEffect(() => {
-        loadProducts()
-    }, [])
+        loadProducts();
+        dispatch(setDidNewWatchAdd(false));
+    },[store?.userStatus?.didTheNewWatchAdd])
 
     const itemTemplate = (product, index) => {
         return (
@@ -114,13 +134,12 @@ const WatchProductList = () => {
                         <InputText id="username" aria-describedby="username-help" value={editWatch.imgAdress} onChange={(e) => handleInputsToEditNewWatch(e.target.value, "imgAdress")} />
                     </div>
                     <div className='flex justify-content-end mt-2'>
+                        <Button icon="pi pi-trash" severity='danger' className='mr-1' onClick={deleteWatch} />
                         <Button icon="pi pi-check" onClick={submitEdit} />
                     </div>
                 </div>
             </Dialog>
             <DataView value={products} listTemplate={listTemplate} />
-            {/* <div className="card flex justify-content-center">
-            </div> */}
         </div>
 
     )
