@@ -83,7 +83,7 @@ const WatchProductList = () => {
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                             <span className="text-2xl font-semibold">${product.price}</span>
                             <Button icon="pi pi-shopping-cart" className="p-button-rounded"></Button>
-                            <Button icon="pi pi-pencil" className="p-button-rounded" onClick={() => {
+                            <Button icon="pi pi-pencil" disabled={store?.userStatus?.user !== "admin"} className="p-button-rounded" onClick={() => {
                                 setVisible(true);
                                 setEditWatch({
                                     wathcId: product.id,

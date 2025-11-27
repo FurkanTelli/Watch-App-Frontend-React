@@ -17,6 +17,16 @@ const ToolbarComponent = () => {
     const { changeTheme } = useContext(PrimeReactContext);
 
 
+    useEffect(() => {
+        console.log(user)
+        if(!user) {
+            const saved = localStorage.getItem("username")
+            console.log(saved)
+            dispatch(setUser(saved));
+        }
+    },[])
+
+
 
     const toggleTheme = () => {
         const current = theme ? "lara-dark-blue" : "lara-light-blue";
@@ -35,6 +45,7 @@ const ToolbarComponent = () => {
             dispatch(setUser(""));
             dispatch(setUserToken(""));
             localStorage.removeItem("myToken");
+            localStorage.removeItem("username");
             await navigate("/")
         } catch (error) {
           console.log(error)

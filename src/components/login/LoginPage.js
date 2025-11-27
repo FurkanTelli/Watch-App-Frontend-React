@@ -51,7 +51,8 @@ const LoginPage = () => {
       if (response.status === 200 || response.status === 201) {
         dispatch(setIsLogin(true))
         dispatch(setUser(login.userName))
-        await localStorage.setItem("myToken", response?.data?.generateToken);
+        localStorage.setItem("myToken", response?.data?.generateToken);
+        localStorage.setItem("username",login.userName);
         dispatch(setUserToken(localStorage.getItem("myToken")))
         await navigate("/Home")
       }

@@ -14,6 +14,7 @@ const HomePage = () => {
     const [visible, setVisible] = useState(false);
     const [newWatch, setNewWatch] = useState({ watchId: "", watchname: "", watchbrand: "", price: 0, imgAdress: "" });
     const dispatch = useDispatch();
+    const store = useSelector(state => state);
 
     const handleInputsToAddNewWatch = (val, type) => {
         setNewWatch((prev) => ({
@@ -42,7 +43,7 @@ const HomePage = () => {
 
             <div className='m-4'>
                 <div className='mb-2 flex justify-content-end'>
-                    <Button label="Add" icon="pi pi-plus" onClick={() => setVisible(true)} />
+                    <Button label="Add" disabled={store?.userStatus?.user !== "admin"} icon="pi pi-plus" onClick={() => setVisible(true)} />
                 </div>
                 <Dialog header="New Watch" visible={visible} style={{ width: '50vw' }} onHide={() => { if (!visible) return; setVisible(false); }}>
                     <div>
