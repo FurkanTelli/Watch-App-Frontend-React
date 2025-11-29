@@ -18,10 +18,8 @@ const ToolbarComponent = () => {
 
 
     useEffect(() => {
-        console.log(user)
         if(!user) {
             const saved = localStorage.getItem("username")
-            console.log(saved)
             dispatch(setUser(saved));
         }
     },[])
@@ -46,6 +44,7 @@ const ToolbarComponent = () => {
             dispatch(setUserToken(""));
             localStorage.removeItem("myToken");
             localStorage.removeItem("username");
+            localStorage.removeItem("myUserId");
             await navigate("/")
         } catch (error) {
           console.log(error)
@@ -69,7 +68,7 @@ const ToolbarComponent = () => {
     const endContent = (
         <React.Fragment>
             <Button icon={theme ? "pi pi-sun" : "pi pi-moon"} severity={theme ? "warning" : "secondary"} className="mr-2" onClick={toggleTheme} />
-            <Button icon="pi pi-user-edit" severity='success' className="mr-2" />
+            <Button icon="pi pi-user-edit" severity='success' onClick={() => navigate("/Edit")} className="mr-2" />
             <Button icon="pi pi-shopping-cart" severity='help' className='mr-2' />
             <Button icon="pi pi-sign-out" onClick={logOut} severity='danger' />
         </React.Fragment >

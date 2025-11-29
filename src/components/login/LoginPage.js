@@ -4,7 +4,7 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import "./LoginPage.css"
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsLogin, setUser, setUserToken } from '../../store/userSlice';
+import { setId, setIsLogin, setUser, setUserToken } from '../../store/userSlice';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../api/User';
 import { Toast } from 'primereact/toast';
@@ -50,9 +50,11 @@ const LoginPage = () => {
       const response = await userService.loginById(login);
       if (response.status === 200 || response.status === 201) {
         dispatch(setIsLogin(true))
+        dispatch(setId(response?.data?.user?.userId))
         dispatch(setUser(login.userName))
         localStorage.setItem("myToken", response?.data?.generateToken);
         localStorage.setItem("username",login.userName);
+        localStorage.setItem("myUserId", response?.data?.user?.userId);
         dispatch(setUserToken(localStorage.getItem("myToken")))
         await navigate("/Home")
       }

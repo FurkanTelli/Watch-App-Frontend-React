@@ -1,0 +1,17 @@
+.edit-component {
+    height: 100vh;
+}
+
+.card-element {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.p-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

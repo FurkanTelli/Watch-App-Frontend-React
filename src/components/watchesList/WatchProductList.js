@@ -50,7 +50,6 @@ const WatchProductList = () => {
     const deleteWatch = async () => {
         try {
             const response = await productService.deleteWatch(editWatch.wathcId);
-            console.log(response)
             if (response?.status === 204) {
                 setVisible(false);
                 await loadProducts();

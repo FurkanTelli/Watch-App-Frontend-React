@@ -16,7 +16,15 @@ const userService = {
     registerUser: async (userBody) => {
         const response = await axios.post(`${API_URL}/createUser`,userBody)
         return response;
-    }
+    },
+    updateUser:async (id, data)  => {
+        const response = await axios.put(`${API_URL}/updateUser/${id}`,data);
+        return response;
+    },
+    deleteUser:async (id) => {
+        const response = await axios.delete(`${API_URL}/deleteUser/${id}`);
+        return response;
+    } 
 }
 
 
