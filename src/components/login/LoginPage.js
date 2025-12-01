@@ -84,9 +84,14 @@ const LoginPage = () => {
         if (response.status === 200 || response.status === 201) {
           setLoading(false);
           setIsClickedToRegisterBtn(false);
-        }
+          toast.current.show({ severity: 'success', summary: 'Registered', detail: "registration completed successfully", life: 3000 });
+        } 
       } catch (error) {
-        console.log(error)
+        console.log(error?.message)
+        if(error?.status === 400) {
+          toast.current.show({ severity: 'error', summary: 'Error', detail:error?.response?.data , life: 3000 });
+          setLoading(false);
+        }
       }
   }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./BasketPage.css";
 import ToolbarComponent from '../toolbar/ToolbarComponent';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,11 +8,14 @@ import { Button } from 'primereact/button';
 import { removeFromTheBasket, setTotalPaymentPrice } from '../../store/userSlice';
 import { Tag } from 'primereact/tag';
 import orderService from '../../api/Order';
+import { Toast } from 'primereact/toast';
 
 const BasketPage = () => {
   const basket = useSelector(state => state?.userStatus?.myBaskets)
   const total = useSelector(state => state?.userStatus?.totalPaymentPrice);
   const dispatch = useDispatch();
+  const toast = useRef(null);
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -54,17 +57,23 @@ const BasketPage = () => {
 
 
   const sendAllOrders = async () => {
+    setLoading(true);
     try {
       const response = await orderService.sendOrders(basket);
-      console.log(response)
+      if (response?.status === 200 || response?.status === 201) {
+        toast.current.show({ severity: 'success', summary: 'Registered', detail: "registration completed successfully", life: 3000 });
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   }
 
 
   return (
     <div>
+      <Toast ref={toast} />
       <ToolbarComponent />
       {basket.length ?
         <div>
@@ -74,11 +83,11 @@ const BasketPage = () => {
             <div>
               <Tag value={`Total  |  ${total}`}></Tag>
             </div>
-            <Button label="Apply" severity="success" onClick={sendAllOrders} />
+            <Button label="Apply" disabled={loading} loading={loading} severity="success" onClick={sendAllOrders} />
           </div>
         </div>
         : <div className='test'>
-          <Tag  icon="pi pi-exclamation-triangle" style={{cursor:"pointer"}} severity="warning" value="There are no products in your cart"></Tag>
+          <Tag icon="pi pi-exclamation-triangle" style={{ cursor: "pointer" }} severity="warning" value="There are no products in your cart"></Tag>
         </div>}
     </div>
   )
