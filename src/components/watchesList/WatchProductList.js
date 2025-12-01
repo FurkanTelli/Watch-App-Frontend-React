@@ -7,7 +7,7 @@ import productService from '../../api/Product';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDidNewWatchAdd } from '../../store/userSlice';
+import { addToTheBasket, setDidNewWatchAdd } from '../../store/userSlice';
 
 
 const WatchProductList = () => {
@@ -60,6 +60,9 @@ const WatchProductList = () => {
         }
     }
 
+    const addToBasket = (watch, watchIndex) => {
+        dispatch(addToTheBasket(watch))
+    } 
 
     useEffect(() => {
         loadProducts();
@@ -80,8 +83,8 @@ const WatchProductList = () => {
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <span className="text-2xl font-semibold">${product.price}</span>
-                            <Button icon="pi pi-shopping-cart" className="p-button-rounded"></Button>
+                            <span className="text-2xl font-semibold">{new Intl.NumberFormat("en-US", {style:"currency", currency:"USD"}).format(product.price)}</span>
+                            <Button icon="pi pi-shopping-cart" disabled={store?.userStatus?.user === "admin"} onClick={() => addToBasket(product, index)} className="p-button-rounded"></Button>
                             <Button icon="pi pi-pencil" disabled={store?.userStatus?.user !== "admin"} className="p-button-rounded" onClick={() => {
                                 setVisible(true);
                                 setEditWatch({

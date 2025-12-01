@@ -15,8 +15,8 @@ const LoginPage = () => {
   const [login, setLogin] = useState({ id: "", userName: "", password: "", email: "" })
   const [register, setRegister] = useState({ userName: "", password: "", repeatPassword: "", email: "" })
   const [loading, setLoading] = useState(false);
-  const store = useSelector(state => state.userStatus.isLogin)
-  const tokenInStore = useSelector(state => state.userStatus.userToken)
+  // const store = useSelector(state => state.userStatus.isLogin)
+  // const tokenInStore = useSelector(state => state.userStatus.userToken)
 
   const toast = useRef(null);
   const dispatch = useDispatch();

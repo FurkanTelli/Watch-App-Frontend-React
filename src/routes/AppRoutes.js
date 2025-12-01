@@ -4,11 +4,12 @@ import HomePage from '../components/home/HomePage'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import EditPage from '../components/edit/EditPage'
+import BasketPage from '../components/basket/BasketPage'
 
 const AppRoutes = () => {
-  const myToken = useSelector(state => state.userStatus.userToken);
+  // const myToken = useSelector(state => state.userStatus.userToken);
 
-    const [tokenExist, setTokenExist] = useState("");
+    // const [tokenExist, setTokenExist] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,6 +24,7 @@ const AppRoutes = () => {
         <Route path='/' element={<LoginPage/>} />
         <Route path='/Home' element={<HomePage/>} />
         <Route path='/Edit' element={<EditPage/>} />
+        <Route path='/MyBasket' element={<BasketPage/>} />
     </Routes>
   )
 }

@@ -54,7 +54,7 @@ const ToolbarComponent = () => {
 
     const startContent = (
         <React.Fragment>
-            <Button icon="pi pi-home"></Button>
+            <Button icon="pi pi-home" onClick={() => navigate("/Home")} ></Button>
         </React.Fragment>
     );
 
@@ -69,7 +69,7 @@ const ToolbarComponent = () => {
         <React.Fragment>
             <Button icon={theme ? "pi pi-sun" : "pi pi-moon"} severity={theme ? "warning" : "secondary"} className="mr-2" onClick={toggleTheme} />
             <Button icon="pi pi-user-edit" severity='success' onClick={() => navigate("/Edit")} className="mr-2" />
-            <Button icon="pi pi-shopping-cart" severity='help' className='mr-2' />
+            <Button icon="pi pi-shopping-cart" severity='help' onClick={() => navigate("/MyBasket")} className='mr-2' />
             <Button icon="pi pi-sign-out" onClick={logOut} severity='danger' />
         </React.Fragment >
     );

@@ -7,6 +7,7 @@ const initialState = {
     isLogin: false,
     myBaskets: [],
     userToken: "",
+    totalPaymentPrice: 0,
     didTheNewWatchAdd: false
 }
 
@@ -27,18 +28,39 @@ export const userSlice = createSlice({
         setIsLogin: (state, action) => {
             state.isLogin = action.payload;
         },
-        setMyBaskets: (state, action) => {
-            state.myBaskets = action.payload;
+        addToTheBasket: (state, action) => {
+            const item = action.payload;
+            const exist = state.myBaskets.find(el => el.id === item.id);
+            if (exist) {
+                exist.quantity += 1;
+            } else {
+                state.myBaskets.push({ ...item, quantity: 1, userId: localStorage.getItem("myUserId") });
+            }
+        },
+        removeFromTheBasket: (state, action) => {
+            const index = state.myBaskets.findIndex((item => item.id === action.payload));
+            if (index !== -1) {
+                state.myBaskets.splice(index, 1);
+            }
         },
         setUserToken: (state, action) => {
             state.userToken = action.payload;
         },
         setDidNewWatchAdd: (state, action) => {
             state.didTheNewWatchAdd = action.payload;
+        },
+        setTotalPaymentPrice: (state) => {
+            let sum = 0;
+            if (state.myBaskets.length) {
+                for (let i = 0; i < state.myBaskets.length; i++) {
+                  sum = sum + (state.myBaskets[i].price * state.myBaskets[i].quantity)
+                }
+                state.totalPaymentPrice = sum;
+            }
         }
     }
 })
 
 
-export const { setId, setIsLogin, setTheme, setUser, setMyBaskets, setUserToken, setDidNewWatchAdd } = userSlice.actions;
+export const { setId, setIsLogin, setTheme, setUser, setMyBaskets, setUserToken, setDidNewWatchAdd, addToTheBasket, removeFromTheBasket, setTotalPaymentPrice } = userSlice.actions;
 export default userSlice.reducer;

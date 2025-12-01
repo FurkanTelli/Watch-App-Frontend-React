@@ -74,7 +74,7 @@ const EditPage = () => {
   const header = (
     <div className='flex align-items-center justify-content-between'>
       <h3>{store?.userStatus?.user}</h3>
-      <Button label="Delete" severity="danger" onClick={() => setVisible(true)} icon="pi pi-trash" size="small" style={{ marginLeft: '0.5em' }} />
+      <Button label="Delete" severity="danger" onClick={() => setVisible(true)} disabled={store?.userStatus?.user === "admin"} icon="pi pi-trash" size="small" style={{ marginLeft: '0.5em' }} />
     </div>
   )
 
