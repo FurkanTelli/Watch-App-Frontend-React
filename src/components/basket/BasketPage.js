@@ -5,14 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DataView } from 'primereact/dataview';
 import { classNames } from 'primereact/utils';
 import { Button } from 'primereact/button';
-import { removeFromTheBasket, setTotalPaymentPrice } from '../../store/userSlice';
+import { removeFromTheBasket, setEmptyTheArray, setTotalPaymentPrice } from '../../store/userSlice';
 import { Tag } from 'primereact/tag';
 import orderService from '../../api/Order';
 import { Toast } from 'primereact/toast';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 const BasketPage = () => {
   const basket = useSelector(state => state?.userStatus?.myBaskets)
   const total = useSelector(state => state?.userStatus?.totalPaymentPrice);
+  const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
   const toast = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -61,8 +63,9 @@ const BasketPage = () => {
     try {
       const response = await orderService.sendOrders(basket);
       if (response?.status === 200 || response?.status === 201) {
-        toast.current.show({ severity: 'success', summary: 'Registered', detail: "registration completed successfully", life: 3000 });
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: "Your order has been received", life: 3000 });
         setLoading(false);
+        dispatch(setEmptyTheArray())
       }
     } catch (error) {
       console.log(error.message);
@@ -70,26 +73,35 @@ const BasketPage = () => {
     }
   }
 
+   const accept = async() => {
+        toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+        await sendAllOrders()
+    }
+
+    const reject = () => {
+        toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+    }
 
   return (
     <div>
       <Toast ref={toast} />
-      <ToolbarComponent />
-      {basket.length ?
-        <div>
-          <DataView value={basket} listTemplate={listTemplate} />
-          <hr />
-          <div className='flex justify-content-between ml-3 mr-3'>
+      <ConfirmDialog group="declarative"  visible={visible} onHide={() => setVisible(false)} message="Are you sure you want to proceed?" 
+    header="Confirmation" icon="pi pi-exclamation-triangle" accept={accept} reject={reject} />
+          {basket.length ?
             <div>
-              <Tag value={`Total  |  ${total}`}></Tag>
+              <DataView value={basket} listTemplate={listTemplate} />
+              <hr />
+              <div className='flex justify-content-between ml-3 mr-3'>
+                <div>
+                  <Tag value={`Total  |  ${total}`}></Tag>
+                </div>
+                <Button label="Apply" disabled={loading} loading={loading} severity="success" onClick={() => setVisible(true)} />
+              </div>
             </div>
-            <Button label="Apply" disabled={loading} loading={loading} severity="success" onClick={sendAllOrders} />
-          </div>
+            : <div className='test'>
+              <Tag icon="pi pi-exclamation-triangle" style={{ cursor: "pointer" }} severity="warning" value="There are no products in your cart"></Tag>
+            </div>}
         </div>
-        : <div className='test'>
-          <Tag icon="pi pi-exclamation-triangle" style={{ cursor: "pointer" }} severity="warning" value="There are no products in your cart"></Tag>
-        </div>}
-    </div>
   )
 }
 

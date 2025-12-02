@@ -97,7 +97,7 @@ const LoginPage = () => {
 
 
   return (
-    <div className='flex h-full justify-content-center align-items-center '>
+    <div className='flex h-full justify-content-center align-items-center'>
       {!isClickedToRegisterBtn ?
         <div className="card flex-column gap-5 py-4 px-3 border-1 border-round-sm shadow-4">
           <div className="p-inputgroup flex-1 ">

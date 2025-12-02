@@ -57,10 +57,13 @@ export const userSlice = createSlice({
                 }
                 state.totalPaymentPrice = sum;
             }
+        },
+        setEmptyTheArray:(state) => {
+            state.myBaskets = [];
         }
     }
 })
 
 
-export const { setId, setIsLogin, setTheme, setUser, setMyBaskets, setUserToken, setDidNewWatchAdd, addToTheBasket, removeFromTheBasket, setTotalPaymentPrice } = userSlice.actions;
+export const { setId, setIsLogin, setTheme, setUser, setMyBaskets, setUserToken, setDidNewWatchAdd, addToTheBasket, removeFromTheBasket, setTotalPaymentPrice, setEmptyTheArray } = userSlice.actions;
 export default userSlice.reducer;

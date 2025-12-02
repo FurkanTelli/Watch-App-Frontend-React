@@ -94,7 +94,7 @@ const EditPage = () => {
 
   return (
     <div className="edit-component">
-      <ToolbarComponent />
+      {/* <ToolbarComponent /> */}
       <Toast ref={toast} />
       <Dialog header="Header" visible={visible} style={{ width: '20vw' }} onHide={() => { if (!visible) return; setVisible(false); }} footer={footerContent}>
         <p className="m-0">

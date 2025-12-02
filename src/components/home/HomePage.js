@@ -39,8 +39,7 @@ const HomePage = () => {
 
     return (
         <div className="card">
-            <ToolbarComponent />
-
+            {/* <ToolbarComponent /> */}
             <div className='m-4'>
                 <div className='mb-2 flex justify-content-end'>
                     <Button label="Add" disabled={store?.userStatus?.user !== "admin"} icon="pi pi-plus" onClick={() => setVisible(true)} />

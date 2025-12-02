@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { DataView } from 'primereact/dataview';
 import { classNames } from 'primereact/utils';
 import { Button } from 'primereact/button';
@@ -8,6 +8,7 @@ import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToTheBasket, setDidNewWatchAdd } from '../../store/userSlice';
+import { Toast } from 'primereact/toast';
 
 
 const WatchProductList = () => {
@@ -16,6 +17,7 @@ const WatchProductList = () => {
     const [visible, setVisible] = useState(false);
     const store = useSelector(state => state);
     const dispatch = useDispatch();
+    const toast = useRef(null);
 
 
     const loadProducts = async () => {
@@ -62,12 +64,13 @@ const WatchProductList = () => {
 
     const addToBasket = (watch, watchIndex) => {
         dispatch(addToTheBasket(watch))
-    } 
+        toast.current.show({ severity: 'success', summary: 'Added', detail: "The product has been successfully added to your shopping cart.", life: 3000 });
+    }
 
     useEffect(() => {
         loadProducts();
         dispatch(setDidNewWatchAdd(false));
-    },[store?.userStatus?.didTheNewWatchAdd])
+    }, [store?.userStatus?.didTheNewWatchAdd])
 
     const itemTemplate = (product, index) => {
         return (
@@ -83,7 +86,7 @@ const WatchProductList = () => {
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <span className="text-2xl font-semibold">{new Intl.NumberFormat("en-US", {style:"currency", currency:"USD"}).format(product.price)}</span>
+                            <span className="text-2xl font-semibold">{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(product.price)}</span>
                             <Button icon="pi pi-shopping-cart" disabled={store?.userStatus?.user === "admin"} onClick={() => addToBasket(product, index)} className="p-button-rounded"></Button>
                             <Button icon="pi pi-pencil" disabled={store?.userStatus?.user !== "admin"} className="p-button-rounded" onClick={() => {
                                 setVisible(true);
@@ -116,7 +119,7 @@ const WatchProductList = () => {
 
     return (
         <div className="card">
-
+            <Toast ref={toast} />
             <Dialog header="New Watch" visible={visible} style={{ width: '50vw' }} onHide={() => { if (!visible) return; setVisible(false); }}>
                 <div>
                     <div className="flex flex-column gap-2">
@@ -141,7 +144,7 @@ const WatchProductList = () => {
                     </div>
                 </div>
             </Dialog>
-            <DataView value={products} listTemplate={listTemplate} />
+            <DataView value={products} listTemplate={listTemplate} paginator rows={5} />
         </div>
 
     )
